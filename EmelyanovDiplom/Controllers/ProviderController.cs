@@ -17,7 +17,7 @@ namespace EmelyanovDiplom.Controllers
 
         }
 
-
+        
         [HttpGet("/GetAllProviders")]
         public async Task<ActionResult<IEnumerable<Provider>>> GetAllProvider()
         {
@@ -25,8 +25,6 @@ namespace EmelyanovDiplom.Controllers
             var providers = await connection.QueryAsync<Provider>("Select * from Provider");
             return Ok(providers);
         }
-
-
         [HttpGet("LoginUser/{userPhone}/{userPassword}")]
         public async Task<ActionResult<Provider>> LoginUser(string userPhone, string userPassword)
         {
@@ -41,8 +39,6 @@ namespace EmelyanovDiplom.Controllers
 
 
         }
-
-
         [HttpPost("/CreateProvider")]
         public async Task<ActionResult<Provider>> CreateProvider(Provider provider)
         {

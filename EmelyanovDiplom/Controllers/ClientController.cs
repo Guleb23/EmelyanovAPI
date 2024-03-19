@@ -18,7 +18,6 @@ namespace EmelyanovDiplom.Controllers
             this.configuration = configuration;
 
         }
-
         [HttpPost("/CreateClient")]
         public async Task<ActionResult<Client>> CreateClient(Client client)
         {
@@ -30,8 +29,6 @@ namespace EmelyanovDiplom.Controllers
 
             return Ok(client);
         }
-
-
         [HttpGet("/GetAllClients")]
         public async Task<ActionResult<IEnumerable<Client>>> GetAllClients()
         {
@@ -39,7 +36,6 @@ namespace EmelyanovDiplom.Controllers
             var clients = await connection.QueryAsync<Client>("select * from Client");
             return Ok(clients);
         }
-
         [HttpGet("/GetAllClientsById/{clientId}")]
         public async Task<ActionResult<Client>> GetAllClientsById(int clientId)
         {
@@ -47,7 +43,6 @@ namespace EmelyanovDiplom.Controllers
             var clients = await connection.QueryAsync<Client>("select * from Client where Id=@Id", new { Id = clientId});
             return Ok(clients);
         }
-
         [HttpGet("LoginClient/{userPhone}/{userPassword}")]
         public async Task<ActionResult<Client>> LoginUser(string userPhone, string userPassword)
         {
@@ -62,37 +57,13 @@ namespace EmelyanovDiplom.Controllers
 
 
         }
-
-
-       
-
-
-
-        [HttpGet("/GetFavorite/{userId}")]
-        public async Task<ActionResult<int[]>> GetFavorite(int userId)
+        [HttpPut("/UpdateClient")]
+        public async Task<ActionResult<Client>> UpdateClient(Client user)
         {
             using var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
-            var clients = await connection.QueryAsync<Client>("select * from Client where Id=@Id", new {Id = userId});
-            string[] s = clients.Select(p => p.Favorite).ToArray();
-            string str = s[0];
-            string[] res = str.Split(',');
-            int[] ints = new int[res.Length];
-            for (int i = 0; i < ints.Length; i++)
-            {
-                ints[i] = int.Parse(res[i]);
-            }
-            return Ok(ints);
-        }
-
-
-        [HttpPut("/AddFavorite")]
-        public async Task<ActionResult<Client>> AddFavorite(Client client)
-        {
-            using var connection = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
-            await connection.ExecuteAsync("update Client set Favorite=@Favorite where Id = @id",
-                client);
+            await connection.ExecuteAsync("update Client set  FirstName = @FirstName, LastName = @LastName, Phone = @Phone, Login = @Login, Password  = @Password where Id = @id",
+                user);
             return Ok();
-
         }
     }
 }
